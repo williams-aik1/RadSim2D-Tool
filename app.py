@@ -69,8 +69,8 @@ uploaded_file = st.file_uploader("Upload CT DICOM (.dcm)", type=["dcm"])
 
 @st.cache_data(show_spinner=True)
 def monte_carlo(mu_map, r_center, c_center, n_photons, beam_sigma, tumor_mask):
-rows, cols = mu_map.shape
-dose_map = np.zeros((rows, cols))
+    rows, cols = mu_map.shape
+    dose_map = np.zeros((rows, cols))
 
 ```
 for _ in range(n_photons):
