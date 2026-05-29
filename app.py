@@ -8,10 +8,10 @@ import pydicom
 # -----------------------------
 st.set_page_config(
     layout="wide",
-    page_title="CT Monte Carlo Radiation Simulation"
+    page_title="RadSim2D Tool"
 )
 
-st.title("Monte Carlo Radiation Dose Simulation (CT-Based)")
+st.title("RadSim2D Tool: Interactive Dose Planning")
 
 # -----------------------------
 # Sidebar Controls
