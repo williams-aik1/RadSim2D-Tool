@@ -1,6 +1,6 @@
 # Elite-Grade `app.py` for RadSim2D
 
-```python'''
+```python
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
