@@ -3,7 +3,6 @@
 ![Python](https://img.shields.io/badge/Python-3.10-blue)
 ![MonteCarlo](https://img.shields.io/badge/Monte%20Carlo-Simulation-orange)
 ![MedicalPhysics](https://img.shields.io/badge/Medical-Physics-green)
-![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
 
 > CT-based physics simulation framework for deterministic and Monte Carlo radiation dose modeling in heterogeneous biological tissue.
 
@@ -11,183 +10,79 @@
 
 ## Overview
 
-**RadSim2D Tool** is an interactive CT-based radiation transport simulator designed for educational and research exploration of dose deposition in heterogeneous human tissue.
+RadSim2D Tool simulates **radiation dose deposition in human tissue** using real CT (DICOM) images. It compares a deterministic beam model with a Monte Carlo photon transport simulation to demonstrate how stochastic interactions and tissue heterogeneity affect tumor dose delivery.
 
-The system compares:
-
-- Deterministic exponential attenuation beam modeling  
-- Monte Carlo photon transport simulation  
-
-using real CT (DICOM) images to demonstrate how tissue heterogeneity and stochastic scattering influence radiation dose distribution.
-
-The framework is implemented as a **Streamlit web application**, enabling real-time visualization, parameter tuning, and comparative analysis.
+The application is implemented as an interactive **Streamlit web app**, enabling real-time visualization of CT-based radiation transport.
 
 ---
 
 ## Objectives
 
-- Simulate radiation transport using patient-specific CT anatomy  
-- Compare deterministic vs Monte Carlo dose models  
-- Evaluate the effect of tissue heterogeneity on dose deposition  
-- Quantify tumor targeting efficiency and dose variability  
-- Provide an interactive educational tool for medical physics  
+- Simulate radiation transport using real CT images  
+- Compare deterministic vs Monte Carlo photon models  
+- Analyze dose deposition across tissue types  
+- Evaluate tumor targeting efficiency and underdose probability  
 
 ---
 
 ## Features
 
-- 📂 Upload CT DICOM (.dcm) images  
+- 📂 Upload CT DICOM images  
 - 🧬 Automatic tissue segmentation (Air / Soft Tissue / Bone)  
-- ⚛️ Deterministic vs Monte Carlo photon transport simulation  
-- 🎯 Tumor region detection and beam targeting  
-- 🔥 Real-time dose heatmap visualization  
-- 📊 Statistical dose analysis dashboard  
-- 📉 Underdose probability estimation  
-- 🧪 Interactive parameter control (photons, beam spread, thresholds)  
+- ⚛️ Monte Carlo photon transport simulation  
+- 🎯 Tumor detection and targeted beam delivery  
+- 🔥 Dose heatmap visualization  
+- 📊 Statistical dose analysis  
+- 📉 Tumor underdose probability computation  
+- 🌐 Interactive Streamlit interface  
 
 ---
 
-## System Pipeline
+## Outputs
 
-RadSim2D follows a modular computational workflow:
-
-1. **Data Acquisition** → Load CT DICOM slice  
-2. **HU Conversion** → Convert pixel intensities to Hounsfield Units  
-3. **Tissue Segmentation** → Classify anatomical regions  
-4. **Physics Mapping** → Assign attenuation coefficients  
-5. **Dose Simulation** → Deterministic + Monte Carlo models  
-6. **Statistical Analysis** → Tumor dose metrics & uncertainty  
+### CT Image Visualization
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c58b31e8-d1b0-4717-b6dc-81d0d633e773" width="300"/>
+  <img src="https://github.com/user-attachments/assets/5f80ab86-71d6-4aa8-96d5-ccbe189f6505" width="400"/>
+</p>
 
 ---
 
-## Technical Methodology
+### Tissue Segmentation Map
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/2e8cbf3a-d247-45c0-849f-e1455582f900" width="400"/>
+</p>
+
+---
+
+### Radiation Dose Heatmap
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b95736ca-50ab-4dc8-9a55-a1a7d54a0cc4" width="400"/>
+</p>
+
+---
+
+### Tumor Analysis
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/4a681290-4c46-40d7-8b9b-8cacbf0c203f" width="400"/>
+</p>
+
+---
+
+### Dose Distribution Histogram
+<img width="543" height="435" alt="Dose Histogram" src="https://github.com/user-attachments/assets/de68e5c8-2681-4179-b40e-e8f3b95d8d9f" />
+
+---
+
+### Random vs Targeted Beam Comparison
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/fef18c13-3b01-404a-8ac6-cbe67784d453" width="500"/>
+</p>
+
+---
+
+## Technical Approach
 
 ### 1. Hounsfield Unit Conversion
 
-CT intensities are converted using scanner calibration:
-
-\[
-HU = pixel \cdot slope + intercept
-\]
-
-This standardizes CT values into physical density representation.
-
----
-
-### 2. Tissue Segmentation
-
-| Tissue Type   | HU Range        |
-|--------------|-----------------|
-| Air          | HU < -500       |
-| Soft Tissue  | -500 ≤ HU < 300 |
-| Bone         | HU ≥ 300        |
-
-Attenuation coefficients:
-
-| Tissue       | μ (attenuation) |
-|--------------|-----------------|
-| Air          | 0.02            |
-| Soft Tissue  | 0.20            |
-| Bone         | 0.50            |
-
----
-
-### 3. Deterministic Beam Model
-
-Radiation attenuation follows Beer–Lambert law:
-
-\[
-I(x) = I_0 e^{-\mu x}
-\]
-
-Dose approximation:
-
-\[
-D(x) = I_0 (1 - e^{-\mu x})
-\]
-
-Characteristics:
-- Straight-line propagation  
-- No scattering  
-- Computationally efficient  
-- Smooth dose gradients  
-
----
-
-### 4. Monte Carlo Photon Transport
-
-Photon propagation is modeled stochastically:
-
-Interaction probability:
-
-\[
-P_{interaction} = 1 - e^{-\mu}
-\]
-
-Key features:
-- Random interaction sampling  
-- Energy deposition at collision points  
-- Lateral scattering of photons  
-- Energy decay per interaction step  
-
-This produces realistic heterogeneous dose fields consistent with stochastic radiation transport behavior.
-
----
-
-### 5. Tumor Modeling
-
-- Tumor region defined within soft tissue  
-- Gaussian beam initialization around tumor axis  
-- Targeted photon sampling improves dose deposition  
-- Region-based statistical evaluation performed  
-
-Key metrics:
-- Mean tumor dose  
-- Standard deviation  
-- Underdose probability  
-- Coverage efficiency  
-
----
-
-## Key Results
-
-- Targeted beam improves tumor dose by ~40× compared to random beam  
-- Monte Carlo simulation produces heterogeneous, realistic dose distributions  
-- Soft tissue receives highest energy deposition  
-- Bone strongly attenuates photon transport  
-- Underdose probability ≈ 0.4 under single-beam conditions  
-
----
-
-## Visualization Outputs
-
-RadSim2D generates:
-
-- CT slice visualization  
-- Hounsfield Unit map  
-- Tissue segmentation map  
-- Deterministic dose heatmap  
-- Monte Carlo dose distribution  
-- Tumor overlay visualization  
-- Dose histogram analysis  
-- Random vs targeted beam comparison  
-
----
-
-## Tech Stack
-
-- Python  
-- NumPy  
-- Matplotlib  
-- Pydicom  
-- Pandas  
-- Streamlit  
-
----
-
-## Running the Application
-
-### Install dependencies
-
-```bash
-pip install -r requirements.txt
+CT pixel values are converted to physical density:
